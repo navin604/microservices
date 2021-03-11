@@ -1,0 +1,124 @@
+openapi: 3.0.0
+info:
+  description: This API receives events from a tesla vehicle
+  version: "1.0.0"
+  title: Reading API
+  contact:
+    email: nparmar17@my.bcit.ca
+tags:
+  - name: Driving 
+    description: Data related to vehicle when driving
+paths:
+  /drive/auto-pilot:
+    post:
+      tags:
+        - Driving
+      summary: Reports data used for auto pilot
+      operationId: app.auto_pilot
+      description: System reads data when auto pilot engaged
+      responses:
+        '200':
+          description: record created
+          
+        '400':
+          description: bad input parameter, system error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutoPilot'
+        description: Reading item to add
+  /drive/auto-brake:
+    post:
+      tags:
+        - Driving
+      summary: Reports data used for automatic emergency braking
+      operationId: app.auto_brake
+      description: Data reported prior/after auto brake is engaged
+      responses:
+        '200':
+          description: record created
+          
+        '400':
+          description: bad input parameter, system error
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AutoBrake'
+        description: Reading item to add
+        
+        
+components:
+  schemas:
+    AutoPilot:
+      type: object
+      required:
+        - time
+        - location
+        - speed_at_enable
+        - highway
+        - weather_data
+        - vehicle_id
+        - follow_distance
+      properties:
+        time:
+          type: string
+          example: 23:21:05
+        location:
+          type: string
+          example: Main St & E Hastings St Vancouver, BC V6A 2T7
+        speed_at_enable:
+          type: integer
+          example: 75
+        highway:
+          type: string
+          example: true
+        weather_data:
+          type: string
+          example: frosty
+        vehicle_id:
+          type: string
+          format: uuid
+          example: 287h1ee-8764-4c78-e766-d7hj875g6851
+        follow_distance:
+          type: string
+          example: 10
+       
+    AutoBrake:
+      type: object
+      required:
+        - time
+        - location
+        - speed_at_enable
+        - highway
+        - weather_data
+        - follow_distance
+        - vehicle_id
+        - engaged
+      properties:
+        time:
+          type: string
+          example: 23:21:05
+        location:
+          type: string
+          example: Main St & E Hastings St Vancouver, BC V6A 2T7
+        speed_at_enable:
+          type: integer
+          example: 75
+        highway:
+          type: string
+          example: true
+        weather_data:
+          type: string
+          example: frosty
+        follow_distance:
+          type: string
+          example: 11.7
+        vehicle_id:
+          type: string
+          format: uuid
+          example: 287h1ee-8764-4c78-e766-d7hj875g6851
+        engaged:
+          type: string
+          example: true

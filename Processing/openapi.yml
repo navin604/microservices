@@ -1,0 +1,55 @@
+openapi: 3.0.0
+info:
+  description: This API provides event stats
+  version: "1.0.0"
+  title: Stats API
+  contact:
+    email: nparmar17@my.bcit.ca
+
+paths:
+  /stats:
+    get:
+      summary: Gets events stats
+      operationId: app.get_stats
+      description: Gets auto pilot and auto brake statistics
+      responses:
+        '200':
+          description:  Successfully returned a list of events
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/ReadingStats'
+        '400':
+          description: Invalid Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+components:
+  schemas:
+    ReadingStats:
+      required:
+        - num_ap_readings
+        - speed_ap_readings
+        - num_ab_readings
+        - speed_ab_readings
+      properties:
+        num_ap_readings:
+          type: integer
+          example: 500000
+        speed_ap_readings:
+          type: integer
+          example: 200
+        num_ab_readings:
+          type: integer
+          example: 500000
+        speed_ab_readings:
+          type: integer
+          example: 200
+      type: object
