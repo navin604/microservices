@@ -6,8 +6,6 @@ import json
 from pykafka import KafkaClient
 from pykafka.common import OffsetType
 from threading import Thread
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from base import Base
 from auto_pilot import AutoPilot
 from auto_brake import AutoBrake
@@ -31,53 +29,6 @@ DB_ENGINE = create_engine(f"mysql+pymysql://{app_config['datastore']['user']}:{a
 Base.metadata.bind = DB_ENGINE
 DB_SESSION = sessionmaker(bind=DB_ENGINE)
 
-
-#
-# def auto_pilot(body):
-#     """ Receives a auto pilot reading """
-#     id = body['vehicle_id']
-#     session = DB_SESSION()
-#     ap = AutoPilot(body['vehicle_id'],
-#                        body['time'],
-#                        body['location'],
-#                        body['speed_at_enable'],
-#                        body['highway'],
-#                        body['weather_data'],
-#                        body['follow_distance'])
-#
-#
-#     session.add(ap)
-#
-#     session.commit()
-#     session.close()
-#
-#     logger.debug(f'Stored event {logger.name} request with a unique id of {id}')
-#
-#     return NoContent, 201
-
-
-# def auto_brake(body):
-#     """ Receives a autobrake reading """
-#     print('adwad')
-#     session = DB_SESSION()
-#     id = body['vehicle_id']
-#
-#     ab = AutoBrake(body['time'],
-#                    body['location'],
-#                    body['speed_at_enable'],
-#                    body['highway'],
-#                    body['weather_data'],
-#                    body['follow_distance'],
-#                    body['vehicle_id'],
-#                    body['engaged'])
-#
-#
-#     session.add(ab)
-#
-#     session.commit()
-#     session.close()
-#     logger.debug(f'Stored event {logger.name} request with a unique id of {id}')
-#     return NoContent, 201
 
 def get_auto_pilot(timestamp):
     """ Gets new auto pilot reading after the timestamp """
@@ -136,9 +87,9 @@ def process_messages():
         msg_str = msg.value.decode('utf-8')
         msg = json.loads(msg_str)
         logger.info("Message: %s" % msg)
-        print('pre load')
+        
         payload = msg["payload"]
-        print('post load')
+        
 
         if msg["type"] == "AutoPilot":
             id = payload['vehicle_id']
@@ -161,8 +112,8 @@ def process_messages():
 
             return NoContent, 201
         elif msg["type"] == "AutoBrake":
-            """ Receives a autobrake reading """
-            print('adwad')
+            """ Receives an autobrake reading """
+            
             session = DB_SESSION()
             id = payload['vehicle_id']
 
