@@ -2,6 +2,7 @@ import connexion
 from connexion import NoContent
 import yaml
 import logging
+from flask_cors import CORS, cross_origin
 import logging.config
 import json
 from pykafka import KafkaClient
@@ -87,6 +88,8 @@ def get_auto_brake_reading(index):
 
 
 app = connexion.FlaskApp(__name__, specification_dir='')
+CORS(app.app)
+app.app.config['CORS_HEADERS'] = 'Content-Type'
 app.add_api("openapi.yml", strict_validation=True, validate_responses=True)
 
 
