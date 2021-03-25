@@ -2,6 +2,8 @@ import connexion
 from connexion import NoContent
 from mysql import connector
 import pymysql
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 import json
 from pykafka import KafkaClient
 from pykafka.common import OffsetType
